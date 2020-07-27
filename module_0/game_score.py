@@ -19,22 +19,28 @@ def game_core_bisection(number):
     while number != predict:
         count += 1
 
+        if number > predict:
+            min_possible = predict
+        else:
+            max_possible = predict
+
         """
         Если возможные числа различаются на единицу,
-        среденеарифметического - всегда одно и тоже число (бесконечный цикл).
-        Проверенный на этом шаге predict - это одно из двух этих чисел
-        Мы используем деление без остатка, так что это меньшее число
-        Следовательно загаданное (непроверенное) число - большее из них
+        среденеарифметического - всегда одно и тоже число (бесконечный цикл)
+        Потому проверяем напрямую
         """
         if max_possible - min_possible == 1:
-            predict = max_possible
-        else:
-            if number > predict:
-                min_possible = predict
-            elif number < predict:
-                max_possible = predict
+            if min_possible == number:
+                break
+            elif max_possible == number:
+                # не угадали с min_possible, потому увеличиваем число попыток
+                count += 1
+                break
+            else:
+                # если оба числа неверные, значит ошибка в алгоритме
+                raise Exception(f"The algorithm can't guess '{number}'")
 
-            predict = (min_possible + max_possible) // 2
+        predict = (min_possible + max_possible) // 2
 
     return count  # выход из цикла, если угадали
 
